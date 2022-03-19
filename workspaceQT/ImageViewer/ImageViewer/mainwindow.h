@@ -26,7 +26,6 @@ private:
     void initUI();
     void createActions();
     void showImage(QString);
-    void setupShortcuts();
 
 private slots:
     void openImage();

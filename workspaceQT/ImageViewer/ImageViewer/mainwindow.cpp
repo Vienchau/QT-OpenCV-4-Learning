@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QRegularExpression>
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -16,9 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     , viewMenu(nullptr)
     , currentImage(nullptr)
 {
-
     initUI();
-
 }
 
 MainWindow::~MainWindow()
@@ -29,20 +28,16 @@ MainWindow::~MainWindow()
 void MainWindow::initUI()
 {
     this -> resize(800, 600);
-
     //setup menubar
     fileMenu = menuBar() -> addMenu("&File");
     viewMenu = menuBar() -> addMenu("&View");
-
     //setup toolbar
     fileToolBar = addToolBar("File");
     viewToolBar = addToolBar("View");
-
     //image display
     imageScene = new QGraphicsScene(this);
     imageView = new QGraphicsView(imageScene);
     setCentralWidget(imageView);
-
     //status bar
     //statusBar() is func in QStatusBar class, this func return the status bar for the main wd.
     mainStatusbar = statusBar();
@@ -50,10 +45,7 @@ void MainWindow::initUI()
     //addPermanentWidget() is func in QStatusBar class, add widget to the status bar.
     mainStatusbar -> addPermanentWidget(mainStatusLabel);
     mainStatusLabel -> setText("Image Information will be here!");
-
     createActions();
-
-
 }
 
 void MainWindow::createActions()
@@ -84,13 +76,11 @@ void MainWindow::createActions()
 
     connect(exitAction, SIGNAL(triggered(bool)), QApplication::instance(), SLOT(quit()));
     connect(openAction, SIGNAL(triggered(bool)), this, SLOT(openImage()));
-    /*connect(saveAsAction, SIGNAL(triggered(bool)), this, SLOT(saveAs()));
+    connect(saveAsAction, SIGNAL(triggered(bool)), this, SLOT(saveAs()));
     connect(zoomInAction, SIGNAL(triggered(bool)), this, SLOT(zoomIn()));
     connect(zoomOutAction, SIGNAL(triggered(bool)), this, SLOT(zoomOut()));
     connect(prevAction, SIGNAL(triggered(bool)), this, SLOT(prevImage()));
-    connect(nextAction, SIGNAL(triggered(bool)), this, SLOT(nextImage()));*/
-
-    setupShortcuts();
+    connect(nextAction, SIGNAL(triggered(bool)), this, SLOT(nextImage()));
 }
 
 void MainWindow::showImage(QString path)
@@ -105,25 +95,6 @@ void MainWindow::showImage(QString path)
     currentImagePath = path;
 }
 
-void MainWindow::setupShortcuts()
-{
-    QList<QKeySequence> shortcuts;
-       shortcuts << Qt::Key_Plus << Qt::Key_Equal;
-       zoomInAction->setShortcuts(shortcuts);
-
-       shortcuts.clear();
-       shortcuts << Qt::Key_Minus << Qt::Key_Underscore;
-       zoomOutAction->setShortcuts(shortcuts);
-
-       shortcuts.clear();
-       shortcuts << Qt::Key_Up << Qt::Key_Left;
-       prevAction->setShortcuts(shortcuts);
-
-       shortcuts.clear();
-       shortcuts << Qt::Key_Down << Qt::Key_Right;
-       nextAction->setShortcuts(shortcuts);
-}
-
 void MainWindow::openImage()
 {
     QFileDialog dialog(this);
@@ -131,7 +102,8 @@ void MainWindow::openImage()
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setNameFilter(tr("Images (*.png *.bmp *.jpg)"));
     QStringList filePaths;
-    if (dialog.exec()) {
+    if (dialog.exec()) //exec method return zero value if cancel btn clicked
+    {
         filePaths = dialog.selectedFiles();
         showImage(filePaths.at(0));
     }
@@ -139,26 +111,65 @@ void MainWindow::openImage()
 
 void MainWindow::zoomIn()
 {
-
+    imageView->scale(1.2, 1.2);
 }
 
 void MainWindow::zoomOut()
 {
-
+    imageView->scale(1/1.2, 1/1.2);
 }
 
 void MainWindow::prevImage()
 {
-
+    QFileInfo current(currentImagePath);
+    QDir dir = current.absoluteDir();
+    QStringList nameFilters;
+    nameFilters << "*.png" << "*.bmp" << "*.jpg";
+    QStringList fileNames = dir.entryList(nameFilters, QDir::Files, QDir::Name);
+    int idx = fileNames.indexOf(QRegularExpression(QRegularExpression::escape(current.fileName())));
+    if(idx > 0) {
+        showImage(dir.absoluteFilePath(fileNames.at(idx - 1)));
+    }
+    else {
+        QMessageBox::information(this, "Information", "Current image is the first one.");
+    }
 }
 
 void MainWindow::nextImage()
 {
-
+        QFileInfo current(currentImagePath);
+        QDir dir = current.absoluteDir();
+        QStringList nameFilters;
+        nameFilters << "*.png" << "*.bmp" << "*.jpg";
+        QStringList fileNames = dir.entryList(nameFilters, QDir::Files, QDir::Name);
+        int idx = fileNames.indexOf(QRegularExpression(QRegularExpression::escape(current.fileName())));
+        if(idx < fileNames.size() - 1) {
+            showImage(dir.absoluteFilePath(fileNames.at(idx + 1)));
+        } else {
+            QMessageBox::information(this, "Information", "Current image is the last one.");
+        }
 }
 
 void MainWindow::saveAs()
 {
-
+    if (currentImage == nullptr) {
+           QMessageBox::information(this, "Information", "Nothing to save.");
+           return;
+       }
+       QFileDialog dialog(this);
+       dialog.setWindowTitle("Save Image As ...");
+       dialog.setFileMode(QFileDialog::AnyFile);
+       dialog.setAcceptMode(QFileDialog::AcceptSave);
+       dialog.setNameFilter(tr("Images (*.png *.bmp *.jpg)"));
+       QStringList fileNames;
+       if (dialog.exec()) {
+           fileNames = dialog.selectedFiles();
+           if(QRegularExpression(".+\\.(png|bmp|jpg)").match(fileNames.at(0)).hasMatch())
+           {
+               currentImage->pixmap().save(fileNames.at(0));
+           } else {
+               QMessageBox::information(this, "Information", "Save error: bad format or filename.");
+           }
+       }
 }
 
