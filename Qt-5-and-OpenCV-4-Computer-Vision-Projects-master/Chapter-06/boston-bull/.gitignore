@@ -1,9 +1,0 @@
-*.tar
-*.bak
-*.zip
-*.vec
-Images/
-classifier/
-negative/
-positive/
-visualisation/
