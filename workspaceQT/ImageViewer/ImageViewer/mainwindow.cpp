@@ -138,10 +138,11 @@ void MainWindow::prevImage()
 void MainWindow::nextImage()
 {
         QFileInfo current(currentImagePath);
-        QDir dir = current.absoluteDir();
+        QDir dir = current.absoluteDir(); //absoluteDir() return the absolute path as QDir object
         QStringList nameFilters;
         nameFilters << "*.png" << "*.bmp" << "*.jpg";
-        QStringList fileNames = dir.entryList(nameFilters, QDir::Files, QDir::Name);
+        //entryList(name filter, file attribute filter, sorts)
+        QStringList fileNames = dir.entryList(nameFilters, QDir::Files, QDir::Name); //entryList return the list of all file in this directory
         int idx = fileNames.indexOf(QRegularExpression(QRegularExpression::escape(current.fileName())));
         if(idx < fileNames.size() - 1) {
             showImage(dir.absoluteFilePath(fileNames.at(idx + 1)));
