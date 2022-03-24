@@ -1,0 +1,11 @@
+Deployment Qt apps on Windows:
+https://www.youtube.com/watch?v=8qozxqSZQEg
+
+How to create executable file for Qt Application (Stack overflow):
+https://stackoverflow.com/questions/8312725/how-to-create-executable-file-for-a-qt-application
+
+
+Introduction of SDK for Rainbow Soft Face Reg QT (Solved missing file opencv dll when build code):
+https://developpaper.com/introduction-of-sdk-for-rainbow-soft-face-recognition-under-qt/
+
+
