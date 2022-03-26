@@ -15,7 +15,6 @@ SOURCES += \
 
 HEADERS += \
     editor_plugin_interface.h \
-    editor_plugin_interface.h \
     mainwindow.h
 
 FORMS += \

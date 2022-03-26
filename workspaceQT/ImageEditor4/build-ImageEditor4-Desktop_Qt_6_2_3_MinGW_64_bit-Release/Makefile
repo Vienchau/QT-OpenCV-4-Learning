@@ -291,6 +291,7 @@ Makefile: ../ImageEditor4/ImageEditor4.pro D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspe
 		D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/qt_config.prf \
 		D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/win32-g++/qmake.conf \
 		D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/exclusive_builds.prf \
 		D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/toolchain.prf \
 		D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/default_pre.prf \
@@ -320,7 +321,6 @@ Makefile: ../ImageEditor4/ImageEditor4.pro D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspe
 		D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/lib/Qt6Gui.prl \
 		D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/lib/Qt6Core.prl \
 		D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/lib/Qt6EntryPoint.prl \
-		.qmake.stash \
 		D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/build_pass.prf
 	$(QMAKE) -o Makefile ..\ImageEditor4\ImageEditor4.pro -spec win32-g++ "CONFIG+=qtquickcompiler"
 D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/spec_pre.prf:
@@ -544,6 +544,7 @@ D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/qt_functions.prf:
 D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/qt_config.prf:
 D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/win32-g++/qmake.conf:
 D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/exclusive_builds.prf:
 D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/toolchain.prf:
 D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/default_pre.prf:
@@ -573,7 +574,6 @@ D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/lib/Qt6Widgets.prl:
 D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/lib/Qt6Gui.prl:
 D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/lib/Qt6Core.prl:
 D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/lib/Qt6EntryPoint.prl:
-.qmake.stash:
 D:/MY_WORK/Qt/Qt/6.2.3/mingw_64/mkspecs/features/build_pass.prf:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ..\ImageEditor4\ImageEditor4.pro -spec win32-g++ "CONFIG+=qtquickcompiler"

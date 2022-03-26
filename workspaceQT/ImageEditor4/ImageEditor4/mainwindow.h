@@ -11,7 +11,8 @@
 #include <QLabel>
 #include <QGraphicsPixmapItem>
 #include <QMap>
-//#include <opencv2/opencv.hpp>
+#include <QPluginLoader>
+
 #include "editor_plugin_interface.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc.hpp>

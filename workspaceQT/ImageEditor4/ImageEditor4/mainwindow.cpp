@@ -5,6 +5,8 @@
 #include <QKeyEvent>
 #include <QDebug>
 #include <QPluginLoader>
+#include <QMap>
+
 
 //#include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
@@ -12,8 +14,6 @@
 
 #include <QRegularExpression>
 #include "mainwindow.h"
-
-using namespace cv;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -100,6 +100,8 @@ void MainWindow::createActions()
     editMenu->addAction(blurAction);
     editToolBar->addAction(blurAction);
     connect(blurAction, SIGNAL(triggered(bool)), this, SLOT(blurImage()));
+
+
 }
 
 void MainWindow::openImage()
@@ -218,26 +220,31 @@ void MainWindow::blurImage()
         QMessageBox::information(this, "Information", "No image to edit.");
         return;
     }
+
     QPixmap pixmap = currentImage->pixmap();
+    //pixmap -> image
     QImage image = pixmap.toImage();
+    //covert format of QImage
     image = image.convertToFormat(QImage::Format_RGB888);
+    // QImage -> Mat
     cv::Mat mat = cv::Mat(
         image.height(),
         image.width(),
         CV_8UC3,
         image.bits(),
         image.bytesPerLine());
-
+    //blur image, first arg is image to blur, second is template, third is size
     cv::Mat tmp;
     cv::blur(mat, tmp, cv::Size(8, 8));
     mat = tmp;
-
+    //convert Mat -> Image
     QImage image_blurred(
         mat.data,
         mat.cols,
         mat.rows,
         mat.step,
         QImage::Format_RGB888);
+    //convert image to pixmap
     pixmap = QPixmap::fromImage(image_blurred);
     imageScene->clear();
 
@@ -252,7 +259,7 @@ void MainWindow::blurImage()
 
 void MainWindow::loadPlugins()
 {
-    QDir pluginsDir(QApplication::instance()->applicationDirPath() + "/plugins");
+    QDir pluginsDir(QApplication::instance()->applicationDirPath()+ "/plugins");
     QStringList nameFilters;
     nameFilters << "*.so" << "*.dylib" << "*.dll";
     QFileInfoList plugins = pluginsDir.entryInfoList(
