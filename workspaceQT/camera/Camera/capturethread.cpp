@@ -44,7 +44,7 @@ void CaptureThread::run()
         emit frameCapture(&frame);
     }
 
-    cap.release();
+    cap.release(); //close video file or capture device
     running = false;
 
 }

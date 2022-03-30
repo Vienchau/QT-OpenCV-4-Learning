@@ -10,7 +10,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , fileMenu(nullptr)
     , capturer(nullptr)
-    //inherited class, parent kyword?
 {
     initUI();
     data_lock = new QMutex;
@@ -114,13 +113,17 @@ void MainWindow::openCamera()
 
     int camID = 0;
     capturer = new CaptureThread(camID, data_lock);
+    //when the CaptureThread::frameCaptured signal is emitted,
+    //the MainWindow::updateFrame slot (method) will be called with the same argument
+    //that's used when the signal is emitted.
     connect(capturer, &CaptureThread::frameCapture, this, &MainWindow::updateFrame);
-    capturer -> start();
+    capturer -> start(); //start the thread
     mainStatusLabel -> setText(QString("Capturing Camera %1").arg(camID));
 }
 
 void MainWindow::updateFrame(cv::Mat *mat )
 {
+    //using QMutex to protect the pointer "frame", 1 moment, 1 thread can access that pointer
     data_lock->lock();
     currentFrame = *mat;
     data_lock->unlock();
