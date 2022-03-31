@@ -8,16 +8,18 @@
 #include <QGraphicsScene>
 #include <QCheckBox>
 #include <QPushButton>
+#include <QTextBrowser>
 
 #include <QListView>
 #include <QStandardItemModel>
 #include <QStatusBar>
 #include <QLabel>
 #include <QMutex>
-
-
+#include <opencv2/core.hpp>
+#include <zbar.h>
 #include <capturethread.h>
-
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #ifdef CAMERA_USE_QT_CAMERA
 #include <QCameraViewfinder>
 #include <QCamera>
@@ -39,6 +41,12 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    typedef struct
+    {
+        std:: string type;
+        std:: string data;
+        std:: vector<cv::Point> location;
+    }decodedObject;
 
 private:
     void initUI();
@@ -72,15 +80,17 @@ private:
     QCheckBox *monitorCheckBox;
     QPushButton *recordPushButton;
 
-    QListView *saved_list;
-    //QStandardItemModel *list_model;
 
     QStatusBar *mainStatusBar;
     QLabel *mainStatusLabel;
+    QTextBrowser *dataBrowser;
 
     QMutex *data_lock;
     CaptureThread *capturer;
     cv::Mat currentFrame;
+
+
+
 private:
 
 };

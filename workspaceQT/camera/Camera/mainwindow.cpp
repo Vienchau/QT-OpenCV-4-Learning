@@ -3,8 +3,13 @@
 #include <QGridLayout>
 #include <QtMultimedia>
 #include <QMessageBox>
-
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include <capturethread.h>
+#include <zbar.h>
+#include <opencv2/core.hpp>
+
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -51,8 +56,9 @@ void MainWindow::initUI()
 
 
 
-    saved_list = new QListView(this);
-    main_layout -> addWidget(saved_list, 13, 0 , 4, 1);
+
+    dataBrowser = new QTextBrowser(this);
+    main_layout -> addWidget(dataBrowser, 13, 0 , 4, 1);
 
     // create the new widget to use main_layout, set this new widget in the mainwindows w func setCentralWidget();
     QWidget *widget = new QWidget();
@@ -121,12 +127,39 @@ void MainWindow::openCamera()
     mainStatusLabel -> setText(QString("Capturing Camera %1").arg(camID));
 }
 
-void MainWindow::updateFrame(cv::Mat *mat )
+void MainWindow::updateFrame(cv::Mat *mat)
 {
     //using QMutex to protect the pointer "frame", 1 moment, 1 thread can access that pointer
     data_lock->lock();
     currentFrame = *mat;
     data_lock->unlock();
+    zbar::ImageScanner scanner;
+    cv:: Mat  grey;
+    cvtColor(currentFrame,grey, cv::COLOR_BGR2GRAY);
+    int width = currentFrame.cols;
+    int height = currentFrame.rows;
+    uchar *raw = (uchar *)grey.data;
+    zbar:: Image image(width, height, "Y800", raw, width * height);
+    int n =scanner.scan(image);
+    for(zbar::Image::SymbolIterator symbol = image.symbol_begin();symbol != image.symbol_end();++symbol)
+    {
+        std::vector<cv::Point> vp;
+        QString text = QString::fromStdString(symbol ->get_data());
+        dataBrowser ->insertPlainText(text + "\n");
+        int n = symbol->get_location_size();
+        for(int i=0;i<n;i++)
+            {
+            vp.push_back(cv::Point(symbol->get_location_x(i),symbol->get_location_y(i)));
+            }
+        cv::RotatedRect r = minAreaRect(vp);
+        cv::Point2f pts[4];
+        r.points(pts);
+        for(int i=0;i<4;i++)
+            {
+            line(currentFrame,pts[i],pts[(i+1)%4],cv::Scalar(255,0,0),3);
+            }
+    }
+
 
     QImage frame(
         currentFrame.data,
@@ -134,12 +167,12 @@ void MainWindow::updateFrame(cv::Mat *mat )
         currentFrame.rows,
         currentFrame.step,
         QImage::Format_RGB888);
-    QPixmap image = QPixmap::fromImage(frame);
+    QPixmap image1 = QPixmap::fromImage(frame);
 
     imageScene->clear();
-    imageScene->addPixmap(image);
+    imageScene->addPixmap(image1);
     imageScene->update();
-    imageView->setSceneRect(image.rect());
+    imageView->setSceneRect(image1.rect());
 
 }
 

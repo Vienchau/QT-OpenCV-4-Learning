@@ -26,13 +26,47 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 
+
+
+
 INCLUDEPATH += D:\MY_WORK\OPENCV\opencv\release\install\include
 
 LIBS += D:\MY_WORK\OPENCV\opencv\release\bin\libopencv_core454.dll
 LIBS += D:\MY_WORK\OPENCV\opencv\release\bin\libopencv_imgproc454.dll
 LIBS += D:\MY_WORK\OPENCV\opencv\release\bin\libopencv_video454.dll
 LIBS += D:\MY_WORK\OPENCV\opencv\release\bin\libopencv_videoio454.dll
+LIBS += D:\MY_WORK\OPENCV\opencv\release\bin\libopencv_highgui454.dll
+LIBS += D:\MY_WORK\OPENCV\opencv\release\bin\libopencv_objdetect454.dll
+
+
+
+
+
+
+INCLUDEPATH += D:\MY_WORK\zbar\include
+LIBS += D:\MY_WORK\zbar\bin\libzbar64-0.dll
+
+
+
+
+
+
+
 
 
 INCLUDEPATH += D:\MY_WORK\Qt\Qt\6.2.3\mingw_64\include
 LIBS += D:\MY_WORK\Qt\Qt\6.2.3\mingw_64\bin\Qt6Multimedia.dll
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,7 +5,7 @@
 #include <QString>
 #include <QThread>
 #include <QMutex>
-
+#include <zbar.h>
 #include "opencv2/opencv.hpp"
 #include "opencv2/videoio.hpp"
 #include "opencv2/video/background_segm.hpp"
@@ -20,10 +20,14 @@ public:
     ~CaptureThread();
 
 
+
+
     void setRunning(bool run)
     {
         running = run;
     }
+
+
 
 protected:
     void run() override;
