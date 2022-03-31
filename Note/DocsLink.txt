@@ -9,3 +9,11 @@ Introduction of SDK for Rainbow Soft Face Reg QT (Solved missing file opencv dll
 https://developpaper.com/introduction-of-sdk-for-rainbow-soft-face-recognition-under-qt/
 
 
+Barcode and QR code Scanner using ZBar and OpenCVBarcode and QR code Scanner using ZBar and OpenCV:
+https://learnopencv.com/barcode-and-qr-code-scanner-using-zbar-and-opencv/
+
+
+Real time QR Code / Bar code detection with webcam using OpenCV and ZBar:
+https://blog.ayoungprogrammer.com/2014/04/real-time-qr-code-bar-code-detection.html
+
+

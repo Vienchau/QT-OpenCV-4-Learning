@@ -45,13 +45,13 @@ void MainWindow::initUI()
     QGridLayout *toolLayout = new QGridLayout();
     main_layout ->addLayout(toolLayout, 12,  0 , 1, 1);
 
-    monitorCheckBox = new QCheckBox(this);
-    monitorCheckBox ->setText("Monitor On/Off");
-    toolLayout -> addWidget(monitorCheckBox, 0, 0);
+    //monitorCheckBox = new QCheckBox(this);
+    //monitorCheckBox ->setText("Monitor On/Off");
+    //toolLayout -> addWidget(monitorCheckBox, 0, 0);
 
     recordPushButton = new QPushButton(this);
     recordPushButton -> setText("Record");
-    toolLayout -> addWidget(recordPushButton, 0, 1, Qt::AlignHCenter);
+    toolLayout -> addWidget(recordPushButton, 0, 2, Qt::AlignCenter);
     toolLayout -> addWidget(new QLabel(this), 0, 2);
 
 
@@ -97,11 +97,11 @@ void MainWindow::createActions()
 void MainWindow::showCameraInfo()
 {
  const QList<QCameraDevice> cameras =  QMediaDevices::videoInputs();
- QString info = QString("Available Cameras: \n");
+ QString info = QString("Available Cameras already setup: \n");
 
  foreach (const QCameraDevice &cameraInfo, cameras)
  {
-     info += "id camera: " + cameraInfo.id();
+     //info += "id camera: " + cameraInfo.id();
      info += cameraInfo.description() + "\n" ;
  }
  QMessageBox::information(this, "Cameras", info);
