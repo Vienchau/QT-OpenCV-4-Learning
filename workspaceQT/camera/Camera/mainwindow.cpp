@@ -133,14 +133,21 @@ void MainWindow::updateFrame(cv::Mat *mat)
     data_lock->lock();
     currentFrame = *mat;
     data_lock->unlock();
+
+    //QRCode scanner by zbar library
+    //construct image scanner class
     zbar::ImageScanner scanner;
     cv:: Mat  grey;
+    //covert BGR (opencv) to GRAY image
     cvtColor(currentFrame,grey, cv::COLOR_BGR2GRAY);
-    int width = currentFrame.cols;
-    int height = currentFrame.rows;
+    //
+    int width = currentFrame.cols; //collumns ~ image's width
+    int height = currentFrame.rows; //rows ~ image's height
     uchar *raw = (uchar *)grey.data;
+    //construct image class in zbar lib, create a new Image with the specified parameters (covert the grayscale image to Zbar compatible format
     zbar:: Image image(width, height, "Y800", raw, width * height);
-    int n =scanner.scan(image);
+    scanner.scan(image);
+    //extract result
     for(zbar::Image::SymbolIterator symbol = image.symbol_begin();symbol != image.symbol_end();++symbol)
     {
         std::vector<cv::Point> vp;
@@ -149,13 +156,18 @@ void MainWindow::updateFrame(cv::Mat *mat)
         int n = symbol->get_location_size();
         for(int i=0;i<n;i++)
             {
+            //push_back: adding 1 element at the end of vector
             vp.push_back(cv::Point(symbol->get_location_x(i),symbol->get_location_y(i)));
             }
+        //Finds a rotated rectangle of the minimum area enclosing the input 2D point set.
         cv::RotatedRect r = minAreaRect(vp);
+        // Point2f: 2 ~ 2 elements, f ~ float
         cv::Point2f pts[4];
+        //RetatedRect.poits(pts[]) returns 4 vertices of the rectangle
         r.points(pts);
         for(int i=0;i<4;i++)
             {
+            //line( Input&Output Array, point i, point i+1, color, thickness)
             line(currentFrame,pts[i],pts[(i+1)%4],cv::Scalar(255,0,0),3);
             }
     }
